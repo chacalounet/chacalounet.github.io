@@ -282,4 +282,15 @@ if (isset(window.app) && isset(window.app.ui)){
 
       // window.app.ui.navbar.option.mdc.setMaxHeight();
       // window.app.ui.navbar.option.mdc.setFixedPosition({ 
-      // window.app.ui.nav
+      // window.app.ui.navbar.option.mdc.setAbsolutePosition({ 
+      //   // right: 12,
+      //   // right: 0,
+      //   // bottom: 0,
+      //   top: window.app.ui.navbar.options.last('height')
+      // });
+
+      // window.app.ui.navbar.option.menu.first().style.maxHeight = '100px';
+
+    });
+  }
+}

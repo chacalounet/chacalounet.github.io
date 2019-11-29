@@ -9,6 +9,11 @@ if (isset(window.app) && isset(window.app.ui)){
       'delay':300,
     });
 
+    element.button.add('click', ()=>{
+        
+      window.app.ui.navbar.option.active();
+    });
+
     var Generer = (datas, nbr, f, finished) => {
 
         if(is_numeric(nbr)){
