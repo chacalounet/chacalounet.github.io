@@ -242,9 +242,10 @@ if (isset(window.app) && isset(window.app.ui)){
                 
                 select_min.input.add('input', ()=>{
 
-                    save.disable();
-                    select_min.leading.update('loop');
-                    select_min.timeout(select_min.input.check_input, element.options.last('delay'));
+                    // save.disable();
+                    // select_min.leading.update('loop');
+                    // select_min.timeout(select_min.input.check_input, element.options.last('delay'));
+                    select_min.input.check_change();
                     select_min.input.update(select_min.value);
                 });
                 
@@ -353,9 +354,10 @@ if (isset(window.app) && isset(window.app.ui)){
                 
                 select_max.input.add('input', ()=>{
 
-                    save.disable();
-                    select_max.leading.update('loop');
-                    select_max.timeout(select_max.input.check_input, element.options.last('delay'));
+                    // save.disable();
+                    // select_max.leading.update('loop');
+                    // select_max.timeout(select_max.input.check_input, element.options.last('delay'));
+                    select_max.input.check_change();
                     select_max.input.update(select_max.value);
                 });
                 
@@ -510,10 +512,14 @@ if (isset(window.app) && isset(window.app.ui)){
                 }));
                 button.init();
                 
-                var stop_button = bottom.insert(window.app.tools.mdc.button({
+                var stop_button = 
+                // bottom.insert(
+                    window.app.tools.mdc.button({
                     label:'Stop',
                     class:'w-100 my-2',
-                }));
+                })
+                // )
+                ;
                 stop_button.icon.options.set('class', 'spinner-border');
                 stop_button.init();
             }
@@ -580,80 +586,87 @@ if (isset(window.app) && isset(window.app.ui)){
                     
                     tirages.first().textContent = 0;
                     
-                    Generer(element.balls, element.params.last('select_min'), (data, stop)=>{
 
-                        tirages.first().textContent = parseInt(tirages.first().textContent)+1;
-                        selects.first().textContent = tirages.first().textContent;
+                    element.timeout(()=>{
 
-                        if(_stop_button === true){
-                            stop();
-                            _stop_button = false;
-                        }
-                        
-                        var t_container = form.insert('<div class="d-flex flex-wrap align-items-center justify-content-center border rounded m-1">');
-                        
-                        foreach(data, (d)=>{
+                        Generer(element.balls, element.params.last('select_min'), (data, stop)=>{
+    
+                            tirages.first().textContent = parseInt(tirages.first().textContent)+1;
+                            selects.first().textContent = tirages.first().textContent;
+    
+                            if(_stop_button === true){
+                                stop();
+                                _stop_button = false;
+                            }
                             
-                            var el = t_container.insert('<span class="ball bg-color-inverted text-color-inverted m-1">'+d);
+                            var t_container = form.insert('<div class="d-flex flex-wrap align-items-center justify-content-center border rounded m-1">');
                             
-                            el.first().addEventListener('click', (event) => {
+                            foreach(data, (d)=>{
                                 
-                                element.dispatch(d, 'set_filters');
-                                element.dispatch(d, 'filters');
-                            });
-
-
-                            element.add('set_filters', (n)=>{
-
-                                if(d == n){
+                                var el = t_container.insert('<span class="ball bg-color-inverted text-color-inverted m-1">'+d);
+                                
+                                el.first().addEventListener('click', (event) => {
                                     
-                                    if(el.hasClass('selected')){
-                                        el.removeClass('selected');
+                                    element.dispatch(d, 'set_filters');
+                                    element.dispatch(d, 'filters');
+                                });
+    
+    
+                                element.add('set_filters', (n)=>{
+    
+                                    if(d == n){
                                         
-                                        if(!empty(t_container.options.has(n))){
-                                            t_container.options.remove_values(n);
+                                        if(el.hasClass('selected')){
+                                            el.removeClass('selected');
+                                            
+                                            if(!empty(t_container.options.has(n))){
+                                                t_container.options.remove_values(n);
+                                            }
+                                            if(!empty(form.options.has(n))){
+                                                form.options.remove_values(n);
+                                            }
                                         }
-                                        if(!empty(form.options.has(n))){
-                                            form.options.remove_values(n);
+                                        else{
+                                            el.addClass('selected');
+                                            
+                                            if(empty(t_container.options.has(n))){
+                                                t_container.options.add(null, n);
+                                            }
+                                            if(empty(form.options.has(n))){
+                                                form.options.add(null, n);
+                                            }
                                         }
                                     }
-                                    else{
-                                        el.addClass('selected');
-                                        
-                                        if(empty(t_container.options.has(n))){
-                                            t_container.options.add(null, n);
-                                        }
-                                        if(empty(form.options.has(n))){
-                                            form.options.add(null, n);
+                                });
+    
+                                element.add('filters', (n)=>{
+    
+                                    if(t_container.options.has(n) || empty(form.options)){
+    
+                                        if(!empty(t_container.first().style.getPropertyValue('display'))){
+                                            t_container.active();
+                                            selects.first().textContent = parseInt(selects.first().textContent||0)+1;
                                         }
                                     }
-                                }
+                                    else if(empty(t_container.options)){
+    
+                                        if(empty(t_container.first().style.getPropertyValue('display'))){
+                                            
+                                            t_container.desactive();
+                                            selects.first().textContent = parseInt(selects.first().textContent||0)-1;
+                                        }
+                                    }
+                                });
+                                
                             });
-
-                            element.add('filters', (n)=>{
-
-                                if(t_container.options.has(n) || empty(form.options)){
-
-                                    if(!empty(t_container.first().style.getPropertyValue('display'))){
-                                        t_container.active();
-                                        selects.first().textContent = parseInt(selects.first().textContent||0)+1;
-                                    }
-                                }
-                                else if(empty(t_container.options)){
-
-                                    if(empty(t_container.first().style.getPropertyValue('display'))){
-                                        
-                                        t_container.desactive();
-                                        selects.first().textContent = parseInt(selects.first().textContent||0)-1;
-                                    }
-                                }
-                            });
-                            
+    
+                        }, ()=>{
+                            stop_button.click();
+                            addClass(document.body, 'active');
                         });
-
-                    }, ()=>{
-                        stop_button.click();
                     });
+
+                    removeClass(document.body, 'active');
                 }
                 else{
         
