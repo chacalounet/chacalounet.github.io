@@ -1,0 +1,161 @@
+:root {
+	
+	--rgb-primary: var(--rgb-black);
+	--rgb-on-primary: var(--rgb-white);
+	
+	/* --rgb-primary: var(--rgb-white); */
+	/* --rgb-on-primary: var(--rgb-black); */
+
+	--mdc-theme-primary: rgb(var(--rgb-primary));
+	--mdc-theme-on-primary: rgb(var(--rgb-on-primary));
+
+	/* --rgb-secondary: var(--rgb-violet); */
+	--rgb-secondary: var(--rgb-orange);
+	/* --rgb-on-secondary: var(--rgb-blue-2); */
+	--rgb-on-secondary: var(--rgb-facebook);
+	
+    --mdc-theme-secondary: rgb(var(--rgb-secondary));
+	--mdc-theme-on-secondary: rgb(var(--rgb-on-secondary));
+
+	--rgb-background: var(--rgb-white);
+	--rgb-on-background: var(--rgb-black);
+
+	/* --rgb-background: var(--rgb-black); */
+	/* --rgb-on-background: var(--rgb-white); */
+
+    --mdc-theme-background: rgb(var(--rgb-background));
+    --mdc-theme-on-background: rgb(var(--rgb-on-background));
+}
+
+/* :root .dark {
+	--rgb-background: 0, 0, 0;
+	--rgb-on-background: 255, 255, 255;
+    --mdc-theme-background: rgb(var(--rgb-background));
+    --mdc-theme-on-background: rgb(var(--rgb-on-background));
+}
+:root .light {
+	--rgb-primary: 255, 255, 255;
+	--rgb-on-primary: 0, 0, 0;
+	--mdc-theme-primary: rgb(var(--rgb-primary));
+	--mdc-theme-on-primary: rgb(var(--rgb-on-primary));
+}
+:root .user {
+	--rgb-user: 176, 0, 32;
+	--rgb-on-user: 255, 255, 255;
+
+	--mdc-theme-primary: rgb(var(--rgb-user));
+	--mdc-theme-on-primary: rgb(var(--rgb-on-user));
+	
+    --mdc-theme-secondary: rgb(var(--rgb-user));
+	--mdc-theme-on-secondary: rgb(var(--rgb-on-user));
+	
+    --mdc-theme-background: rgb(var(--rgb-user));
+    --mdc-theme-on-background: rgb(var(--rgb-on-user));
+}
+:root .blue {
+	--rgb-primary: 0, 200, 255;
+	--rgb-on-primary: 255, 255, 255;
+	--mdc-theme-primary: rgb(var(--rgb-primary));
+	--mdc-theme-on-primary: rgb(var(--rgb-on-primary));
+	--rgb-background: 0, 200, 255;
+	--rgb-on-background: 255, 255, 255;
+    --mdc-theme-background: rgb(var(--rgb-background));
+    --mdc-theme-on-background: rgb(var(--rgb-on-background));
+} */
+
+body
+{
+	/* overflow-y: hidden; */
+	/* -webkit-overflow-scrolling: touch; */
+	/* background-color: #ccc3; */
+	background-color: var(--mdc-theme-background);
+	/* overflow: hidden; */
+	/* min-height: 100vh; */
+}
+
+button:focus,
+button:active,
+*:focus,
+*:active
+{
+	outline: none;
+}
+
+
+.bg-gradient {
+    background: radial-gradient(135deg, rgba(var(--rgb-background), .9) 0%,rgba(var(--rgb-background), .75) 50%,rgba(var(--rgb-background), .9) 100%);
+	/* background-image: radial-gradient(circle at 50% 50%, hsl(193, 100%, 50%), hsl(161, 74%, 46%)); */
+    /* background: linear-gradient(135deg, rgba(var(--rgb-background), .9) 0%,rgba(var(--rgb-background), .75) 50%,rgba(var(--rgb-background), .9) 100%); */
+    color: var(--mdc-theme-on-background);
+}
+.bg-gradient-inverted {
+    /* background: linear-gradient(135deg, rgba(var(--rgb-background), 1) 10%,rgba(var(--rgb-background), 0.5) 90%,rgba(var(--rgb-background), 1) 100%); */
+    /* background: linear-gradient(135deg, rgba(var(--rgb-background), 1) 10%,rgba(var(--rgb-background), .75) 50%,rgba(var(--rgb-background), .9) 75%,rgba(var(--rgb-background), 1) 90%); */
+	background: linear-gradient(135deg, rgba(var(--rgb-on-background), .9) 0%,rgba(var(--rgb-on-background), 0.75) 50%,rgba(var(--rgb-on-background), .9) 100%);
+    color: var(--mdc-theme-background);
+}
+.bg-gradient-primary {
+    /* background: linear-gradient(135deg, rgba(var(--rgb-primary), 1) 10%,rgba(var(--rgb-primary), 0.5) 90%,rgba(var(--rgb-primary), 1) 100%); */
+    /* background: linear-gradient(135deg, rgba(var(--rgb-primary), 1) 10%,rgba(var(--rgb-primary), .75) 50%,rgba(var(--rgb-primary), .9) 75%,rgba(var(--rgb-primary), 1) 90%); */
+    background: linear-gradient(135deg, rgba(var(--rgb-primary), .9) 10%,rgba(var(--rgb-primary), .75) 55%,rgba(var(--rgb-primary), 0.9) 90%);
+    color: var(--mdc-theme-on-primary);
+}
+.bg-gradient-primary-inverted {
+    /* background: linear-gradient(135deg, rgba(var(--rgb-primary), 1) 10%,rgba(var(--rgb-primary), 0.5) 90%,rgba(var(--rgb-primary), 1) 100%); */
+    /* background: linear-gradient(135deg, rgba(var(--rgb-primary), 1) 10%,rgba(var(--rgb-primary), .75) 50%,rgba(var(--rgb-primary), .9) 75%,rgba(var(--rgb-primary), 1) 90%); */
+    background: linear-gradient(135deg, rgba(var(--rgb-on-primary), .9) 10%,rgba(var(--rgb-on-primary), .75) 55%,rgba(var(--rgb-on-primary), 0.9) 90%);
+    color: var(--mdc-theme-primary);
+}
+.bg-gradient-secondary {
+    /* background: linear-gradient(135deg, rgba(var(--rgb-secondary), 1) 10%,rgba(var(--rgb-secondary), 0.5) 90%,rgba(var(--rgb-secondary), 1) 100%); */
+    /* background: linear-gradient(135deg, rgba(var(--rgb-secondary), 1) 10%,rgba(var(--rgb-secondary), .75) 50%,rgba(var(--rgb-secondary), .9) 75%,rgba(var(--rgb-secondary), 1) 90%); */
+    background: linear-gradient(135deg, rgba(var(--rgb-secondary), .9) 10%,rgba(var(--rgb-secondary), .75) 55%,rgba(var(--rgb-secondary), 0.9) 90%);
+    color: var(--mdc-theme-on-secondary);
+}
+.bg-gradient-secondary-inverted {
+    /* background: linear-gradient(135deg, rgba(var(--rgb-secondary), 1) 10%,rgba(var(--rgb-secondary), 0.5) 90%,rgba(var(--rgb-secondary), 1) 100%); */
+    /* background: linear-gradient(135deg, rgba(var(--rgb-secondary), 1) 10%,rgba(var(--rgb-secondary), .75) 50%,rgba(var(--rgb-secondary), .9) 75%,rgba(var(--rgb-secondary), 1) 90%); */
+    background: linear-gradient(135deg, rgba(var(--rgb-on-secondary), .9) 10%,rgba(var(--rgb-on-secondary), .75) 55%,rgba(var(--rgb-on-secondary), 0.9) 90%);
+    color: var(--mdc-theme-secondary);
+}
+
+
+.text-color {
+	color: rgb(var(--rgb-on-background)) !important;
+}
+.bg-color {
+	background-color: rgb(var(--rgb-background)) !important;
+}
+.text-color-inverted {
+    color: rgb(var(--rgb-background)) !important;
+}
+.bg-color-inverted {
+	background-color: rgb(var(--rgb-on-background)) !important;
+}
+
+.text-primary {
+    color: rgb(var(--rgb-primary)) !important;
+}
+.bg-primary {
+	background-color: rgb(var(--rgb-on-primary)) !important;
+}
+.text-primary-inverted {
+	color: rgb(var(--rgb-on-primary)) !important;
+}
+.bg-primary-inverted {
+	background-color: rgb(var(--rgb-primary)) !important;
+}
+
+.text-secondary {
+    color: rgb(var(--rgb-secondary)) !important;
+}
+.bg-secondary {
+	background-color: rgb(var(--rgb-on-secondary)) !important;
+}
+.text-secondary-inverted {
+	color: rgb(var(--rgb-on-secondary)) !important;
+}
+.bg-secondary-inverted {
+	background-color: rgb(var(--rgb-secondary)) !important;
+}
+

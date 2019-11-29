@@ -1,0 +1,118 @@
+:root {
+	
+	--rgb-black: 0, 0, 0;
+	--rgb-white: 255, 255, 255;
+
+	--rgb-orange: 255, 100, 0;
+	--rgb-violet: 100, 0, 255;
+	--rgb-blue: 0, 200, 255;
+	--rgb-blue-2: 0, 150, 150;
+
+	--rgb-muted: 108, 117, 125;
+	--rgb-success: 40, 167, 69;
+	--rgb-warning: 255, 144, 50;
+	--rgb-danger: 255, 64, 50;
+
+	--rgb-active: 85, 172, 238;
+
+	--rgb-twitter: 29, 161, 242;
+	--rgb-facebook: 66, 103, 178;
+	--rgb-google: 220, 78, 65;
+	--rgb-twitch: 117, 80, 185;
+	--rgb-linkedin: 0, 119, 181;
+}
+
+.text-black {
+    color: rgb(var(--rgb-black)) !important;
+}
+.bg-black {
+	background-color: rgb(var(--rgb-black)) !important;
+}
+
+.text-white {
+    color: rgb(var(--rgb-white)) !important;
+}
+.bg-white {
+	background-color: rgb(var(--rgb-white)) !important;
+}
+
+.text-muted {
+    color: rgb(var(--rgb-muted)) !important;
+}
+.bg-muted {
+	background-color: rgb(var(--rgb-muted)) !important;
+}
+
+.text-success {
+    color: rgb(var(--rgb-success)) !important;
+}
+.bg-success {
+	background-color: rgb(var(--rgb-success)) !important;
+}
+
+.text-warning {
+    color: rgb(var(--rgb-warning)) !important;
+}
+.bg-warning {
+	background-color: rgb(var(--rgb-warning)) !important;
+}
+
+.text-danger {
+    color: rgb(var(--rgb-danger)) !important;
+}
+.bg-danger {
+	background-color: rgb(var(--rgb-danger)) !important;
+}
+
+.text-twitter {
+    color: rgb(var(--rgb-twitter)) !important;
+}
+.bg-twitter {
+	background-color: rgb(var(--rgb-twitter)) !important;
+}
+
+.text-facebook {
+    color: rgb(var(--rgb-facebook)) !important;
+}
+.bg-facebook {
+	background-color: rgb(var(--rgb-facebook)) !important;
+}
+
+.text-google {
+    color: rgb(var(--rgb-google)) !important;
+}
+.bg-google {
+	background-color: rgb(var(--rgb-google)) !important;
+}
+
+.text-twitch {
+    color: rgb(var(--rgb-twitch)) !important;
+}
+.bg-twitch {
+	background-color: rgb(var(--rgb-twitch)) !important;
+}
+
+.text-linkedin {
+    color: rgb(var(--rgb-linkedin)) !important;
+}
+.bg-linkedin {
+	background-color: rgb(var(--rgb-linkedin)) !important;
+}
+
+/* body, body *{
+    position: relative;
+} */
+
+@media (min-width: 991.98px) {
+}
+@media (min-width: 768px) {
+}
+@media (min-width: 576px) {
+}
+
+@media (max-width: 991.98px) {
+}
+@media (max-width: 768px) {
+}
+@media (max-width: 576px) {
+}
