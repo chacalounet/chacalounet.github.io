@@ -705,7 +705,7 @@ function to_json(datas) {
 
 function is_array(datas) {
 	if(is_object(datas)){
-		return Array.isArray(datas) || (typeof datas.forEach === 'function' && is_numeric(datas.length));
+		return Array.isArray(datas) || (typeof datas === 'object' && is_numeric(datas.length));
 	}
 	return false;
 }
