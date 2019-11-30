@@ -563,7 +563,7 @@ function is_jsonValid(datas) {
 			return false;
 		}
 	}
-	else if (is_object(datas)) {
+	else if (is_object(datas) && !is_element(datas)) {
 		return true;
 	}
 
@@ -705,7 +705,7 @@ function to_json(datas) {
 
 function is_array(datas) {
 	if(is_object(datas)){
-		return Array.isArray(datas) || (typeof datas === 'object' && is_numeric(datas.length));
+		return Array.isArray(datas) || (typeof datas === 'object' && is_numeric(datas.length) && !is_json(datas));
 	}
 	return false;
 }
@@ -1658,7 +1658,7 @@ class Object_Container {
 			}
 			delete this._jsonLocker;
 		}
-		if(!empty(this.json_array) && !is_object(ret)){
+		if((!empty(this.json_array) && !is_object(ret)) || !empty(this.force_array)){
 			return [ret];
 		}
 		return ret;

@@ -3,7 +3,7 @@ if (isset(window.app))
     window.app.options.import({
         "name": 'App',
         "title": 'Application',
-        "logo": './images/thumbnail.png',
+        // "logo": './images/logo.png',
         "bg": './images/bg.jpeg',
         "icon": './icon.png',
         "overlay": true,
@@ -233,12 +233,16 @@ if (isset(window.app))
         window.app.manifest.options.set('name', window.app.options.get('title'));
         if(isset(window.app.options.last('icon'))){
 
-            window.app.manifest.options.set('icons', {
-                "src": (new URL(window.app.options.last('icon'), window.app.options.server.last('root')+'/')).href,
+            window.app.manifest.options.var('icons', {
+                // "src": window.app.options.last('icon'),
+                // "src": (new URL(window.app.options.last('icon'), window.app.options.server.last('root')+'/')).href,
+                "src": (new URL(window.app.options.last('icon'), window.app.options.server.last('url'))).href,
                 "type": file_mime(window.app.options.last('icon')),
                 "sizes": "495x495"
             });
         }
+
+        // window.app.manifest.options.set('start_url', '/');
         if(isset(window.app.options.server.last('url'))){
 
             window.app.manifest.options.set('start_url', window.app.options.server.last('url'));
@@ -251,7 +255,7 @@ if (isset(window.app))
         window.app.manifest.options.set('background_color', String(getComputedStyle(document.body).getPropertyValue('--mdc-theme-background')).trim());
         window.app.manifest.options.set('display', 'standalone');
 
-        window.app.manifest.options.icons.json_array = true;
+        window.app.manifest.options.icons.force_array = true;
 
         window.app.manifest.dispatch(window.app.manifest.options, 'update');
         
