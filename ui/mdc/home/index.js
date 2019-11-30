@@ -2,7 +2,7 @@ if (isset(window.app) && isset(window.app.ui)){
   
     let element = MODULE('home', '<div>', {
       'icon':'apps',
-      'title':'Acceuil',
+      'title':'Accueil',
       'class':'m-3',
       'min':1,
       'max':100,
