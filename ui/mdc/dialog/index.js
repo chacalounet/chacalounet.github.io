@@ -32,7 +32,7 @@ if (isset(window.app) && isset(window.app.ui)){
     <footer class="mdc-dialog__actions">
     `));
 
-    window.app.ui.dialog.make = (obj, options, f) => {
+    window.app.ui.dialog.make = (obj, options, onClose, onOpen) => {
         
         if(empty(obj instanceof HTML_Container)){
             var obj = new HTML_Container(obj);
@@ -43,27 +43,34 @@ if (isset(window.app) && isset(window.app.ui)){
             // obj.set('options', options);
         }
         
-        if(isset(f)){
-            obj.set('callback', f);
+        if(typeof onClose === 'function'){
+            obj.set('onClose', onClose);
+        }
+        
+        if(typeof onOpen === 'function'){
+            obj.set('onOpen', onOpen);
         }
 
         return obj;
     };
 
-    window.app.ui.dialog.render = (obj, options, f) => {
+    window.app.ui.dialog.render = (obj, options, onClose, onOpen) => {
 
         if (isset(window.app.ui.dialog.mdc)){
-
-            var obj = window.app.ui.dialog.make(obj, options, f);
+            
+            var obj = window.app.ui.dialog.make(obj, options, onClose, onOpen);
 
             // console.log(!empty(obj.get()));
             if(!empty(obj.get())){
-        
-                // // console.log(!empty(window.app.ui.dialog.mdc.isOpen));
-                // if (!empty(window.app.ui.dialog.mdc.isOpen)){
-                //     window.app.ui.dialog.mdc.close();
-                // }
-        
+                
+                if (!empty(window.app.ui.dialog.mdc.isOpen)){
+                    window.app.ui.dialog.mdc.close();
+                }
+
+                if(empty(obj.options.get('actions'))){
+                    obj.options.import(window.app.ui.dialog.options.get('actions'), 'actions');
+                }
+                
                 clearElement(window.app.ui.dialog.container.surface.title.last());
                 clearElement(window.app.ui.dialog.container.surface.content.last());
                 clearElement(window.app.ui.dialog.container.surface.actions.last());
@@ -73,14 +80,24 @@ if (isset(window.app) && isset(window.app.ui)){
 
                 obj.options.parse('actions', (d, k) => {
                     
-                    insertInToElement(window.app.ui.dialog.container.surface.actions.last(), `
-                    <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="${k}">
-                    ${d.last()}
-                    `);
+                    if(is_element(d.last())){
+                        
+                        if(!hasClass(d.last(), 'mdc-dialog__button')){
+                            addClass(d.last(), 'mdc-dialog__button');
+                        }
+                        setOptions(d.last(), 'type', 'button');
+                        setOptions(d.last(), 'data-mdc-dialog-action', k);
+                        insertInToElement(window.app.ui.dialog.container.surface.actions.last(), d.last());
+                    }
+                    else{
+                        insertInToElement(window.app.ui.dialog.container.surface.actions.last(), `
+                        <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="${k}">
+                        ${d.last()}
+                        `);
+                    }
                 });
 
                 obj.options.add('opened', (new Date()).getTime());
-                window.app.ui.dialog.current = obj;
                 window.app.ui.dialog.mdc.open();
                 return obj;
             }
@@ -89,9 +106,9 @@ if (isset(window.app) && isset(window.app.ui)){
         return null;
     };
 
-    window.app.ui.dialog.insert = (obj, options, f) => {
+    window.app.ui.dialog.insert = (obj, options, onClose, onOpen) => {
 
-        var obj = window.app.ui.dialog.make(obj, options, f);
+        var obj = window.app.ui.dialog.make(obj, options, onClose, onOpen);
 
         if(!empty(obj.get()) && !window.app.ui.dialog.get('items').has(obj)){
             window.app.ui.dialog.get('items').add(null, obj);
@@ -100,9 +117,9 @@ if (isset(window.app) && isset(window.app.ui)){
         return obj;
     };
 
-    window.app.ui.dialog.open = (obj, options, f) => {
+    window.app.ui.dialog.open = (obj, options, onClose, onOpen) => {
 
-        var obj = window.app.ui.dialog.insert(obj, options, f);
+        var obj = window.app.ui.dialog.insert(obj, options, onClose, onOpen);
         
         if (!empty(window.app.ui.dialog.mdc.isOpen)){
             window.app.ui.dialog.mdc.close();
@@ -110,16 +127,70 @@ if (isset(window.app) && isset(window.app.ui)){
         
         if(!isset(window.app.ui.dialog.is)){
             
-            window.app.ui.dialog.render(window.app.ui.dialog.get('items').extract_subkey(0));
+            window.app.ui.dialog.is = window.app.ui.dialog.render(window.app.ui.dialog.get('items').extract_subkey(0));
         }
 
         return obj;
     };
 
-    window.app.ui.dialog.close = () => {
+    window.app.ui.dialog.search = (obj) => {
         
-        if(isset(window.app.ui.dialog.mdc) && !empty(window.app.ui.dialog.mdc.isOpen)){
+        var ret = null;
 
+        if(window.app.ui.dialog.get('items').has(obj)){
+            return obj;
+        }
+        
+        if(typeof obj === 'string'){
+
+            window.app.ui.dialog.foreach('items', (item, i, end)=>{
+
+                if(item instanceof Object_Container){
+                    
+                    if(item.has(obj) || obj === item.string()){
+
+                        ret = item;
+                        end();
+                    }
+                }
+            });
+        }
+        return ret;
+    };
+
+    window.app.ui.dialog.remove = (obj) => {
+
+        var remove = window.app.ui.dialog.get('items').remove_values(window.app.ui.dialog.search(obj));
+        while(remove){
+            remove = window.app.ui.dialog.get('items').remove_values(window.app.ui.dialog.search(obj));
+        }
+        
+        if(isset(window.app.ui.dialog.is)){
+            
+            if(window.app.ui.dialog.is.has(obj) || window.app.ui.dialog.is.string() === obj){
+
+                window.app.ui.dialog.close();
+                remove = true;
+            }
+        }
+
+        return remove;
+    };
+
+    window.app.ui.dialog.clear = (query) => {
+
+        window.app.ui.dialog.foreach('items', (d, k) => {
+            
+            if(d.last('query') == query){
+                window.app.ui.dialog.remove_subkey(k, 'items');
+            }
+        });
+    };
+
+    window.app.ui.dialog.close = (query) => {
+        
+        if(isset(window.app.ui.dialog.mdc) && !empty(window.app.ui.dialog.mdc.isOpen) && window.app.ui.dialog.is.last('query') == query){
+            
             window.app.ui.dialog.mdc.close();
             return true;
         }
@@ -127,14 +198,15 @@ if (isset(window.app) && isset(window.app.ui)){
         return false;
     };
 
-    window.app.ui.dialog.add('event', () => {
+    window.app.ui.dialog.add('event', (query) => {
         
-        window.app.ui.dialog.close();
+        window.app.ui.dialog.clear(query);
+        window.app.ui.dialog.close(query);
     });
 
-    window.app.ui.add('event', () => {
+    window.app.ui.add('event', (query) => {
         
-        window.app.ui.dialog.event();
+        window.app.ui.dialog.event(query);
     });
     
     window.app.ui.dialog.add('init', () => {
@@ -150,29 +222,22 @@ if (isset(window.app) && isset(window.app.ui)){
 
         window.app.ui.dialog.mdc.listen('MDCDialog:closed', (e) => {
             
-            // console.log('MDCDialog:closed', window.app.ui.dialog.is);
             if(isset(window.app.ui.dialog.is)){
-                
-                // console.log(e.detail.action);
-                window.app.ui.dialog.is.dispatch(e, 'callback');
-                // window.app.ui.dialog.is = null;
 
-                // console.log(isset(window.app.ui.dialog.first('items')));
+                window.app.ui.dialog.is.dispatch(e, 'onClose');
+                window.app.ui.dialog.is = null;
+
                 if(isset(window.app.ui.dialog.first('items'))){
-                // if(!window.app.ui.dialog.get('items').empty()){
-                    // window.app.ui.dialog.open();
-                    window.app.ui.dialog.render(window.app.ui.dialog.get('items').extract_subkey(0));
-                }
-                else{
-                    window.app.ui.dialog.is = null;
+                    window.app.ui.dialog.open();
                 }
             }
         });
 
         window.app.ui.dialog.mdc.listen('MDCDialog:opened', (e) => {
 
-            // console.log('MDCDialog:opened', window.app.ui.dialog.is);
-            window.app.ui.dialog.is = window.app.ui.dialog.current;
+            if(isset(window.app.ui.dialog.is)){
+                window.app.ui.dialog.is.dispatch(e, 'onOpen');
+            }
 
             window.app.tools.scrollTop({
                 el: window.app.ui.dialog.container.surface.content.last(),
@@ -194,7 +259,7 @@ if (isset(window.app) && isset(window.app.ui)){
 
                 document.body.classList.add("error");
 
-                window.app.ui.dialog.render({
+                window.app.ui.dialog.open({
                     '': datas.string('error'),
                     'title': 'Une erreur critique est survenue !'
                 }, {
@@ -202,7 +267,7 @@ if (isset(window.app) && isset(window.app.ui)){
                         continue: 'Recharger la page' 
                     }
                 },(e)=>{
-                    console.log(e);
+                    // console.log(e);
                     // console.log(window.app.ui.dialog.is);
                     // console.log(window.app.ui.dialog.current);
                     if(e.detail.action === 'continue'){

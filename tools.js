@@ -705,7 +705,7 @@ function to_json(datas) {
 
 function is_array(datas) {
 	if(is_object(datas)){
-		return Array.isArray(datas) || (typeof datas === 'object' && is_numeric(datas.length) && !is_json(datas));
+		return Array.isArray(datas) || (typeof datas === 'object' && is_numeric(datas.length) && !is_json(datas) && !is_element(datas));
 	}
 	return false;
 }
@@ -1669,20 +1669,21 @@ class Object_Container {
 		if(typeof ignore_export === 'function' && ignore_export(datas)){
 			return null;
 		}
+
+		if (is_element(datas)) {
+			// return datas.textContent.trim();
+			// return outerHTML;
+			if (isset(datas.wholeText)) {
+				return datas.wholeText;
+			}
+			return null;
+		}
+		
 		var ret = datas;
 		if (is_jsonValid(datas)) {
 
 			while (typeof datas === 'string') {
 				var datas = JSON.parse(datas);
-			}
-
-			if (is_element(datas)) {
-				// return datas.textContent.trim();
-				// return outerHTML;
-				if (isset(datas.wholeText)) {
-					return datas.wholeText;
-				}
-				return null;
 			}
 
 			// if (isset(datas.outerHTML)) {

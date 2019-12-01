@@ -72,10 +72,22 @@ if (isset(window.app) && isset(window.app.ui)){
 
                 obj.options.parse('actions', (d, k) => {
                     
-                    insertInToElement(window.app.ui.snackbar.surface.actions.last(), `
-                    <button type="button" class="mdc-button mdc-snackbar__action" data-mdc-snackbar-action="${k}">
-                    ${d.last()}
-                    `);
+                    if(is_element(d.last())){
+                        
+                        if(!hasClass(d.last(), 'mdc-snackbar__action')){
+                            addClass(d.last(), 'mdc-snackbar__action');
+                        }
+                        setOptions(d.last(), 'type', 'button');
+                        setOptions(d.last(), 'data-mdc-snackbar-action', k);
+                        insertInToElement(window.app.ui.snackbar.surface.actions.last(), d.last());
+                    }
+                    else{
+                    
+                        insertInToElement(window.app.ui.snackbar.surface.actions.last(), `
+                        <button type="button" class="mdc-button mdc-snackbar__action" data-mdc-snackbar-action="${k}">
+                        ${d.last()}
+                        `);
+                    }
                 });
 
                 obj.options.add('opened', (new Date()).getTime());
