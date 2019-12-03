@@ -1881,8 +1881,29 @@ class Options_Container extends Object_Container {
 
 class HTML_Container extends Options_Container {
 
-	// constructor(el, query, options) {
-	// }
+	constructor(el, options) {
+
+		super(el, options);
+
+		// this.var('class');
+		// this.options.var('class');
+
+		if(is_element(this.last())){
+
+			this.last().addEventListener('click', (e) => {
+	
+				this.dispatch(e, 'click');
+			});
+		}
+		
+		this.add('setter', (options)=>{
+	
+			if(!empty(options instanceof Object_Container)){
+	
+				this.addClass(options.get('class'));
+			}
+		});
+	}
 	
 	el(el){
 
@@ -1899,7 +1920,251 @@ class HTML_Container extends Options_Container {
            var datas = this.el(datas);
 		}
 		return super._add(key, datas, reverse);
-    }
+	}
+			
+	active() {
+
+		// this.removeClass('d-none');
+
+		onObject(this, (el)=>{
+
+			// console.log(e);
+			if(is_element(el)){
+				el.style.display = null;
+			}
+		});
+
+		this.dispatch(null, 'active');
+	}
+
+	desactive() {
+
+		// this.addClass('d-none');
+
+		onObject(this, (el)=>{
+
+			// console.log(e);
+			if(is_element(el)){
+				// el.style.display = 'none';
+				el.style.setProperty('display', 'none', 'important');
+			}
+		});
+
+		this.dispatch(null, 'desactive');
+	}
+
+	focus() {
+
+		if(isset(window.app.ui.drawer) && isset(window.app.ui.drawer.mdc) && !empty(window.app.ui.drawer.mdc.open)){
+			
+			window.app.ui.drawer.set('focus', ()=>{
+
+				this.last().focus();
+				this.dispatch(null, 'focus');
+			});
+		}
+		else{
+
+			this.last().focus();
+			this.dispatch(null, 'focus');
+		}
+	}
+		
+				
+	update(options) {
+		
+		if(!isset(options)){
+			var options = this.options;
+		}
+
+		if(!empty(options instanceof Options_Container)){
+			var options = options.options;
+		}
+		
+		if(empty(options instanceof Object_Container)){
+			var options = new Object_Container(options);
+		}
+
+		// this.setClass([this.options.get('class'),options.get('class')]);
+
+		this.dispatch(options, 'setter');
+		this.dispatch(options, 'update');
+	}
+			
+	init() {
+		
+		this.update(this.options);
+		this.dispatch(this.options, 'init');
+				
+		if(typeof this.inited === 'function'){
+
+			this.inited(this.options);
+		}
+	}
+	
+	getOptions(o) {
+		
+		return getOptions(this, o);
+	}
+
+	addOptions(o, v, glue=' ') {
+
+		addOptions(this, o, v, glue);
+		return this;
+	}
+
+	removeOptions(o) {
+
+		removeOptions(this, o);
+		return this;
+	}
+
+	removeOptionsValues(o, v, glue=' ', autoDelete=true) {
+
+		removeOptionsValues(this, o, v, glue, autoDelete);
+		return this;
+	}
+
+	setOptions(o, v, glue=' ', autoDelete=false) {
+
+		setOptions(this, o, v, glue, autoDelete);
+		return this;
+	}
+
+	hasOptions(o) {
+		
+		return hasOptions(this, o);
+	}
+
+	getClass() {
+		
+		return getClass(this);
+	}
+
+	addClass(c) {
+		
+		addClass(this, c);
+		return this;
+	}
+
+	removeClass(c) {
+		
+		removeClass(this, c);
+		return this;
+	}
+
+	setClass(c) {
+		
+		setClass(this, c);
+		return this;
+	}
+
+	hasClass(c) {
+		
+		return hasClass(this, c);
+	}
+		
+	replaceTo(el) {
+
+		if(empty(el instanceof Object_Container)){
+			var el = new HTML_Container(el);
+		}
+
+		replaceElement(el, this);
+
+		return el;
+	}
+		
+	replace(el) {
+
+		if(empty(el instanceof Object_Container)){
+			var el = new HTML_Container(el);
+		}
+
+		replaceElement(this, el);
+
+		return el;
+	}
+		
+	insertBefore(el) {
+
+		if(empty(el instanceof Object_Container)){
+			var el = new HTML_Container(el);
+		}
+
+		insertBeforeElement(this, el);
+
+		return el;
+	}
+		
+	insertAfter(el) {
+
+		if(empty(el instanceof Object_Container)){
+			var el = new HTML_Container(el);
+		}
+
+		insertAfterElement(this, el);
+
+		return el;
+	}
+		
+	insert(el) {
+
+		if(empty(el instanceof Object_Container)){
+			var el = new HTML_Container(el);
+		}
+		
+		insertInToElement(this, el);
+
+		return el;
+	}
+		
+	insertFirst(el) {
+
+		if(empty(el instanceof Object_Container)){
+			var el = new HTML_Container(el);
+		}
+		
+		insertInToElementFirst(this, el);
+
+		return el;
+	}
+		
+	insertTo(el) {
+
+		if(empty(el instanceof Object_Container)){
+			var el = new HTML_Container(el);
+		}
+		
+		insertInToElement(el, this);
+
+		return el;
+	}
+		
+	insertToFirst(el) {
+
+		if(empty(el instanceof Object_Container)){
+			var el = new HTML_Container(el);
+		}
+
+		insertInToElementFirst(el, this);
+
+		return el;
+	}
+		
+	detach() {
+		
+		detachElement(this);
+
+		return this;
+	}
+		
+	clearAll() {
+		
+		clearElement(this);
+
+		return this;
+	}
 }
 
 const onArray = (datas, f)=>{
@@ -2407,241 +2672,6 @@ const HTML = (el, options)=>{
 
 	var obj = new HTML_Container(el);
 	obj.link('options', options);
-
-	
-
-	obj.getOptions = (o) => {
-		
-		return getOptions(obj, o);
-	};
-
-	obj.addOptions = (o, v, glue=' ') => {
-
-		return addOptions(obj, o, v, glue);
-	};
-
-	obj.removeOptions = (o) => {
-
-		return removeOptions(obj, o);
-	};
-
-	obj.removeOptionsValues = (o, v, glue=' ', autoDelete=true) => {
-
-		return removeOptionsValues(obj, o, v, glue, autoDelete);
-	};
-
-	obj.setOptions = (o, v, glue=' ', autoDelete=false) => {
-
-		return setOptions(obj, o, v, glue, autoDelete);
-	};
-
-	obj.hasOptions = (o) => {
-		
-		return hasOptions(obj, o);
-	};
-
-	obj.getClass = () => {
-		
-		return getClass(obj);
-	};
-
-	obj.addClass = (c) => {
-		
-		return addClass(obj, c);
-	};
-
-	obj.removeClass = (c) => {
-		
-		return removeClass(obj, c);
-	};
-
-	obj.setClass = (c) => {
-		
-		return setClass(obj, c);
-	};
-
-	obj.hasClass = (c) => {
-		
-		return hasClass(obj, c);
-	};
-		
-	obj.replaceTo = (el) => {
-
-		replaceElement(el, obj);
-	};
-		
-	obj.replace = (el) => {
-
-		replaceElement(obj, el);
-	};
-		
-	obj.insertBefore = (el) => {
-
-		if(empty(el instanceof Object_Container)){
-			var el = HTML(el);
-		}
-
-		insertBeforeElement(obj, el);
-
-		return el;
-	};
-		
-	obj.insertAfter = (el) => {
-
-		if(empty(el instanceof Object_Container)){
-			var el = HTML(el);
-		}
-
-		insertAfterElement(obj, el);
-
-		return el;
-	};
-		
-	obj.insert = (el) => {
-
-		if(empty(el instanceof Object_Container)){
-			var el = HTML(el);
-		}
-		
-		insertInToElement(obj, el);
-
-		return el;
-	};
-		
-	obj.insertFirst = (el) => {
-
-		if(empty(el instanceof Object_Container)){
-			var el = HTML(el);
-		}
-		
-		insertInToElementFirst(obj, el);
-
-		return el;
-	};
-		
-	obj.insertTo = (el) => {
-
-		if(empty(el instanceof Object_Container)){
-			var el = HTML(el);
-		}
-		
-		insertInToElement(el, obj);
-
-		return el;
-	};
-		
-	obj.insertToFirst = (el) => {
-
-		if(empty(el instanceof Object_Container)){
-			var el = HTML(el);
-		}
-
-		insertInToElementFirst(el, obj);
-
-		return el;
-	};
-		
-	obj.detach = () => {
-		
-		detachElement(obj);
-	};
-		
-	obj.clearAll = () => {
-		
-		clearElement(obj);
-	};
-		
-	obj.add('active', () => {
-
-		// obj.removeClass('d-none');
-
-		onObject(obj, (el)=>{
-
-			// console.log(e);
-			if(is_element(el)){
-				el.style.display = null;
-			}
-		});
-	});
-
-	obj.add('desactive', () => {
-
-		// obj.addClass('d-none');
-
-		onObject(obj, (el)=>{
-
-			// console.log(e);
-			if(is_element(el)){
-				// el.style.display = 'none';
-				el.style.setProperty('display', 'none', 'important');
-			}
-		});
-	});	
-
-	// obj.var('class');
-	// obj.options.var('class');
-
-	obj.first().addEventListener('click', (e) => {
-
-		obj.dispatch(e, 'click');
-	});
-
-	obj.focus = () => {
-
-		if(isset(window.app.ui.drawer) && isset(window.app.ui.drawer.mdc) && !empty(window.app.ui.drawer.mdc.open)){
-			
-			window.app.ui.drawer.set('focus', ()=>{
-
-				obj.first().focus();
-				obj.dispatch(null, 'focus');
-			});
-		}
-		else{
-
-			obj.first().focus();
-			obj.dispatch(null, 'focus');
-		}
-	};
-	
-			
-	obj.update = (options) => {
-		
-		if(!isset(options)){
-			var options = obj.options;
-		}
-
-		if(!empty(options instanceof Options_Container)){
-			var options = options.options;
-		}
-		
-		if(empty(options instanceof Object_Container)){
-			var options = new Object_Container(options);
-		}
-
-		// obj.setClass([obj.options.get('class'),options.get('class')]);
-
-		obj.dispatch(options, 'setter');
-		obj.dispatch(options, 'update');
-	};
-		
-	obj.add('setter', (options)=>{
-
-		if(!empty(options instanceof Object_Container)){
-
-			obj.addClass(options.get('class'));
-		}
-	});
-			
-	obj.init = () => {
-		
-		obj.update(obj.options);
-		obj.dispatch(obj.options, 'init');
-				
-		if(typeof obj.inited === 'function'){
-
-			obj.inited(obj.options);
-		}
-	};
 
 	return obj;
 };
